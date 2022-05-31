@@ -6,12 +6,11 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 const StuFileUpload = (props) => {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
-  const [state, setState] = useState({
-    // groupname: 'Warriors',
-    // description: '',
-    // submissionTypes: [],
-    // submissionName: '',
+  const [data, setData] = useState({
+    // groupname: '',
+    submissionTypes: [],
   });
+  const [submissionName, SetsubmissionName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
   const dropRef = useRef(); // React ref for managing the hover state of droppable area
@@ -20,9 +19,8 @@ const StuFileUpload = (props) => {
     axios.get('http://localhost:5000/admin/submissionType/')
       .then(response => {
         if (response.data.length > 0) {
-          setState({
-            submissionTypes: response.data.map(submission => submission.submissionName),
-            submissionName: ''
+          setData({
+            submissionTypes: response.data.map(submission => submission.submissionName)
           })
         }
       })
@@ -30,6 +28,8 @@ const StuFileUpload = (props) => {
         console.log(error);
       })
   }, []);
+
+  // console.log('types', data.submissionTypes);
 
 
   const onDrop = (files) => {
@@ -57,24 +57,29 @@ const StuFileUpload = (props) => {
     event.preventDefault();
 
     try {
-      // const { groupname, submissionName } = state;
+      const subName   = submissionName;
+      const groupname = 'Warriors';
+      const sub = subName.submissionName;
       // if (groupname.trim() !== '' && submissionName.trim() !== '') {
-        if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
-          // formData.append('groupname', groupname);
-          // formData.append('submissionName', submissionName);
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('groupname', groupname);
+        formData.append('submissionName', sub);
+        // console.log('grp', groupname);
+        console.log('type', sub);
+        // console.log('form', formData);
 
-          setErrorMsg('');
-          await axios.post('http://localhost:5000/student-submission/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-          props.history.push('/student-home');
-        } else {
-          setErrorMsg('Please select a file to add.');
-        }
+        setErrorMsg('');
+        await axios.post('http://localhost:5000/student-submission/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        props.history.push('/student-home');
+      } else {
+        setErrorMsg('Please select a file to add.');
+      }
       // } else {
       //   setErrorMsg('Please enter all the field values.');
       // }
@@ -83,18 +88,18 @@ const StuFileUpload = (props) => {
     }
   };
 
-  // const onChangeSubmissionName = (e) => {
-  //   this.setState({
-  //     submissionName: e.target.value
-  //   })
-  // }
+  const onChangeSubmissionName = (e) => {
+    SetsubmissionName({
+      submissionName: e.target.value
+    })
+  }
 
-  // const handleInputChange = (event) => {
-  //   setState({
-  //     ...state,
-  //     [event.target.name]: event.target.value
-  //   });
-  // };
+  const handleInputChange = (event) => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value
+    });
+  };
 
   return (
     <React.Fragment>
@@ -104,42 +109,46 @@ const StuFileUpload = (props) => {
       <br />
       <Form className="search-form" onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
-        {/* <Row>
+        <Row>
           <Col>
             <Form.Group controlId="groupname">
               <Form.Label> Group name </Form.Label>
               <Form.Control
                 type="text"
                 name="groupname"
-                required readOnly
-                value={state.groupname}
+                required
+                readOnly
+                value={data.groupname || ''}
                 onChange={handleInputChange}
               />
             </Form.Group>
           </Col>
-        </Row> */}
+        </Row>
         <br />
-        {/* <Row>
+        <Row>
           <Col>
             <Form.Group controlId="Submission Type">
               <Form.Label> Submission Type</Form.Label>
               <Form.Select aria-label='Default select example'
                 required
                 className="form-control"
-                value={state.submissionName}
-                onChange={onChangeSubmissionName}>
+                value={data.submissionName}
+                onChange={onChangeSubmissionName}
+              // onChange={(e) => setState({submissionName: e.target.value})}
+              >
                 {
-                  state.submissionTypes.map(function (submission) {
+                  data.submissionTypes.map(function (submission) {
                     return <option
                       key={submission}
                       value={submission}>{submission}
                     </option>;
                   })
                 }
+                
               </Form.Select>
             </Form.Group>
           </Col>
-        </Row> */}
+        </Row>
         <br />
         <div className="upload-section">
           <Dropzone

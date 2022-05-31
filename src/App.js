@@ -65,6 +65,7 @@ import EmployeeForgotPassword from "./components/userManagement-components/forgo
 import EmployeePasswordReset from "./components/userManagement-components/passwordReset/EmployeePasswordReset";
 
 //studenet routes
+<<<<<<< HEAD
 import CreateGroup from "./components/student-components/create-group.component";
 import studentHome from "./components/student-components/student-home.component";
 import regResearchTopic from "./components/student-components/reg-researchtopic.component";
@@ -75,6 +76,20 @@ import StuFileUpload from "./components/student-components/stu-file-upload.compo
 import HomePage from "./components/homePage.component";
 
 function App() {
+=======
+import CreateGroup from './components/student-components/create-group.component';
+import studentHome from './components/student-components/student-home.component';
+import regResearchTopic from './components/student-components/reg-researchtopic.component';
+import reqCoSupervisor from './components/student-components/req-cosupervisor.component';
+import addSubmission from './components/student-components/add-submission.component';
+import StuFileUpload from './components/student-components/stu-file-upload.component';
+
+
+import HomePage from './components/homePage.component';
+
+function App() {
+
+>>>>>>> 99b82a3e2666f766b5928e83ba9f7b21b1551703
   return (
     <Router>
       <div className="container">
@@ -120,10 +135,14 @@ function App() {
           component={AdminUpdateEmployeeDetails}
         />
         <Route path="/admin-group-list" component={AdminGroupList} />
+<<<<<<< HEAD
         <Route
           path="/admin-allocate-panel-member/:id"
           component={AllocatePanelMember}
         />
+=======
+        <Route path="/admin-allocate-panel-member/:id" component={AllocatePanelMember} />
+>>>>>>> 99b82a3e2666f766b5928e83ba9f7b21b1551703
 
         {/* supervisor paths */}
         <Route path="/supervisor-home" component={SupervisorHome} />
