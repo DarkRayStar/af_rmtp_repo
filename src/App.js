@@ -78,7 +78,6 @@ function App() {
   return (
     <Router>
       <div className="container">
-        <button onClick={callApi}>Call API</button>
         <Navbar />
         <br />
 
